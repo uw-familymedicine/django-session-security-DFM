@@ -1,5 +1,5 @@
 from django import template
-
+from django.urls import reverse, resolve, Resolver404
 from session_security.settings import YAR_WARN_AFTER, WARN_AFTER, YAR_EXPIRE_AFTER, EXPIRE_AFTER
 
 register = template.Library()
