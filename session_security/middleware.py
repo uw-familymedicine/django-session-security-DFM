@@ -25,7 +25,7 @@ except ImportError:  # Django < 1.10
     MiddlewareMixin = object
 
 from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
+from .settings import YAR_EXPIRE_AFTER, EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
 
 
 class SessionSecurityMiddleware(MiddlewareMixin):
@@ -51,7 +51,11 @@ class SessionSecurityMiddleware(MiddlewareMixin):
 
     def get_expire_seconds(self, request):
         """Return time (in seconds) before the user should be logged out."""
-        return EXPIRE_AFTER
+        current_url = resolve(request.path_info).url_name
+        if current_url == 'aa_forms_edit':
+            return YAR_EXPIRE_AFTER
+        else:
+            return EXPIRE_AFTER
 
     def process_request(self, request):
         """ Update last activity time or logout. """
