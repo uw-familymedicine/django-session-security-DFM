@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 import django
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 try: # Django 2.0
     from django.urls import reverse, resolve, Resolver404
 except: # Django < 2.0
@@ -78,7 +79,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
             #logout(request)
-            return HttpResponseRedirect('/logout')
+            return redirect('/logout/')
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
             self.update_last_activity(request, now)
