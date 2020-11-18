@@ -1,3 +1,91 @@
+This is a fork of target: https://github.com/yourlabs/django-session-security
+
+To install locally uninstall any version of django-session-security previously installed with
+
+'pip uninstall django-session-security'
+
+and run
+
+'python3.7 -m pip install git+https://github.com/uw-familymedicine/django-session-security.git'
+
+To install on the Chelan Servers add
+
+git+https://github.com/uw-familymedicine/django-session-security.git
+
+to requirements.txt
+
+SETTINGS:
+The period in sec to display a warning and then logout the user are set in production.py with
+
+SESSION_SECURITY_WARN_AFTER = 27900
+
+SESSION_SECURITY_EXPIRE_AFTER = 28800
+
+SESSION_SECURITY_YAR_WARN_AFTER = 2700
+
+SESSION_SECURITY_YAR_EXPIRE_AFTER = 3600
+
+CODE CHANGES:
+
+session_security/settings.py
+
+add lines for YAR WARN and EXPIRE
+
+EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
+
+YAR_EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_YAR_EXPIRE_AFTER', EXPIRE_AFTER)
+
+WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
+
+YAR_WARN_AFTER = getattr(settings, 'SESSION_SECURITY_YAR_WARN_AFTER', WARN_AFTER)
+
+session_security/middleware.py
+
+add YAR_EXPIRE_AFTER
+
+from .settings import YAR_EXPIRE_AFTER, EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
+
+restructure get_expire_seconds to grab the current request url_name and if the url is aa_forms_edit return YAR_EXPIRE_AFTER
+
+    def get_expire_seconds(self, request):
+        """Return time (in seconds) before the user should be logged out."""
+        current_url = resolve(request.path_info).url_name
+        if current_url == 'aa_forms_edit':
+            return YAR_EXPIRE_AFTER
+        else:
+            return EXPIRE_AFTER
+            
+session_security/templatetags/session_security_tags.py
+
+add url resolve and import YAR settings
+
+from django.urls import reverse, resolve, Resolver404
+from session_security.settings import YAR_WARN_AFTER, WARN_AFTER, YAR_EXPIRE_AFTER, EXPIRE_AFTER
+
+Add structure to expire_after and warn_after to grab the current request url_name and if the url is aa_forms_edit return YAR_EXPIRE_AFTER or YAR_WARN AFTER
+
+@register.filter
+def expire_after(request):
+    current_url = resolve(request.path_info).url_name
+    if current_url == 'aa_forms_edit':
+        return YAR_EXPIRE_AFTER
+    else:
+        return EXPIRE_AFTER
+
+
+@register.filter
+def warn_after(request):
+    current_url = resolve(request.path_info).url_name
+    if current_url == 'aa_forms_edit':
+        return YAR_WARN_AFTER
+    else:
+        return WARN_AFTER
+
+COMMENTS:
+
+Using this structure one could set a timer for any url_name or request.user or group to provide different timers for the site.
+
+
 .. image:: https://img.shields.io/pypi/v/django-session-security.svg
         :target: https://pypi.python.org/pypi/django-session-security
 
