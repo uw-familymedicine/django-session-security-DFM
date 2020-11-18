@@ -79,7 +79,8 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
             #logout(request)
-            return redirect('/logout/')
+            #return redirect('/logout/')  #add send session to auth.logout to end Django session and the forward to SP logout
+            return HttpResponseRedirect(reverse('logout'))
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
             self.update_last_activity(request, now)
