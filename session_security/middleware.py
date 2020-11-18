@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 
 import django
 from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
 try: # Django 2.0
     from django.urls import reverse, resolve, Resolver404
 except: # Django < 2.0
