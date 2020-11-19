@@ -82,7 +82,8 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             #return redirect('/logout/')  #add send session to auth.logout to end Django session and the forward to SP logout
             current_url = resolve(request.path_info).url_name
             if current_url == 'aa_forms_edit':
-                return HttpResponseRedirect(reverse('logout'))
+                logout(request)
+                return HttpResponseRedirect('/loggedout/')
             else:
                 return HttpResponseRedirect(reverse('shibboleth:logout'))
         elif (request.path == reverse('session_security_ping') and
