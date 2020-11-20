@@ -83,9 +83,9 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             current_url = resolve(request.path_info).url_name
             if current_url == 'aa_forms_edit':
                 logout(request)
-                return HttpResponseRedirect('/loggedout/')
+                return redirect('/loggedout/')
             else:
-                return redirect('/shib/logout/')
+                return redirect('/logout/')
                 #return HttpResponseRedirect('/logout/')
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
