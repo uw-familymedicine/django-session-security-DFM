@@ -84,8 +84,8 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             if current_url == 'aa_forms_edit':
                 logout(request)
                 return HttpResponseRedirect('/loggedout/')
-            elif current_url != 'aa_forms_edit':
-                logout(request)
+            else:
+                #logout(request)
                 return HttpResponseRedirect('/testing/')
                 #return HttpResponseRedirect('/logout/')
         elif (request.path == reverse('session_security_ping') and
