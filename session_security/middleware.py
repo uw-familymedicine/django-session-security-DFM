@@ -85,7 +85,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
                 logout(request)
                 return HttpResponseRedirect('/loggedout/')
             else:
-                #logout(request)
+                logout(request)
                 return HttpResponseRedirect('/testing/')
                 #return HttpResponseRedirect('/logout/')
         elif (request.path == reverse('session_security_ping') and
