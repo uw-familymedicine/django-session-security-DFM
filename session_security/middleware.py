@@ -86,7 +86,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
                 return HttpResponseRedirect('/loggedout/')
             else:
                 #return HttpResponseRedirect(reverse('shibboleth:logout'))
-                return HttpResponseRedirect('/shib/logout/')
+                return HttpResponseRedirect('/lougout/')
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
             self.update_last_activity(request, now)
