@@ -78,13 +78,14 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
-            logout(request)
+            #logout(request)
             #return redirect('/logout/')  #add send session to auth.logout to end Django session and the forward to SP logout
-            #current_url = resolve(request.path_info).url_name
-            #if current_url != 'aa_forms_edit':
-                #return redirect('/logout/')
-            #else:
-                #logout(request)
+            current_url = resolve(request.path_info).url_name
+            if current_url == 'aa_forms_edit':
+                logout(request)
+                return redirect('/loggedout/')
+            else:
+                logout(request)
                 #return redirect('/loggedout/')
                 #return HttpResponseRedirect('/logout/')
         elif (request.path == reverse('session_security_ping') and

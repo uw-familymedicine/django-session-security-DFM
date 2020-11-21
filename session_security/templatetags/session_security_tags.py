@@ -26,5 +26,10 @@ def warn_after(request):
 
 @register.filter
 def redirect_to_logout(request):
-    redirect = getattr(settings, 'SESSION_SECURITY_REDIRECT_TO_LOGOUT', False)
-    return redirect
+    current_url = resolve(request.path_info).url_name
+    if current_url == 'aa_forms_edit':
+        redirect = False
+        return redirect
+    else:
+        redirect = getattr(settings, 'SESSION_SECURITY_REDIRECT_TO_LOGOUT', False)
+        return redirect
