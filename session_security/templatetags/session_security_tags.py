@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from django.urls import reverse, resolve, Resolver404
 from session_security.settings import YAR_WARN_AFTER, WARN_AFTER, YAR_EXPIRE_AFTER, EXPIRE_AFTER
 
@@ -21,3 +22,9 @@ def warn_after(request):
         return YAR_WARN_AFTER
     else:
         return WARN_AFTER
+
+
+@register.filter
+def redirect_to_logout(request):
+    redirect = getattr(settings, 'SESSION_SECURITY_REDIRECT_TO_LOGOUT', False)
+    return redirect
