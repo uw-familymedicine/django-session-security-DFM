@@ -27,7 +27,7 @@ except ImportError:  # Django < 1.10
     MiddlewareMixin = object
 
 from .utils import get_last_activity, set_last_activity
-from .settings import YAR_EXPIRE_AFTER, EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
+from .settings import AA_EXPIRE_AFTER, EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
 
 
 class SessionSecurityMiddleware(MiddlewareMixin):
@@ -55,7 +55,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         """Return time (in seconds) before the user should be logged out."""
         current_url = resolve(request.path_info).url_name
         if current_url == 'aa_forms_edit':
-            return YAR_EXPIRE_AFTER
+            return AA_EXPIRE_AFTER
         else:
             return EXPIRE_AFTER
 
@@ -78,16 +78,12 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
-            #logout(request)
-            #return redirect('/logout/')  #add send session to auth.logout to end Django session and the forward to SP logout
-            current_url = resolve(request.path_info).url_name
+            current_url = resolve(request.path_info).url_name # add: send session to auth.logout to end Django session and the forward to AA logout landing page
             if current_url == 'aa_forms_edit':
                 logout(request)
                 return redirect('/loggedout/')
             else:
-                logout(request)
-                #return redirect('/loggedout/')
-                #return HttpResponseRedirect('/logout/')
+                logout(request) # add: send session to auth.logout to end Django session and use returnToUrl to redirect to SP logout
         elif (request.path == reverse('session_security_ping') and
                 'idleFor' in request.GET):
             self.update_last_activity(request, now)
