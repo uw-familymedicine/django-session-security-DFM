@@ -81,7 +81,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             current_url = resolve(request.path_info).url_name # add: send session to auth.logout to end Django session and the forward to AA logout landing page
             if current_url == 'aa_forms_edit':
                 logout(request)
-                return redirect('/loggedout/')
+                return redirect('https://familymedicine.uw.edu/yar-logout/')
             else:
                 logout(request) # add: send session to auth.logout to end Django session and use returnToUrl to redirect to SP logout
         elif (request.path == reverse('session_security_ping') and
