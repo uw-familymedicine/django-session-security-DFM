@@ -15,6 +15,7 @@ import django
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from urllib.parse import quote
 try: # Django 2.0
     from django.urls import reverse, resolve, Resolver404
 except: # Django < 2.0
@@ -81,7 +82,10 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             current_url = resolve(request.path_info).url_name # add: send session to auth.logout to end Django session and the forward to AA logout landing page
             if current_url == 'aa_forms_edit':
                 logout(request)
-                return redirect('https://familymedicine.uw.edu/yar-logout/')
+                targetpath = quote(request.build_absolute_uri())
+                logoutpoint = 'https://familymedicine.uw.edu/yar-logout/'
+                logoutpath = logoutpoint + '?target=%s' % targetpath
+                return redirect(logoutpath)
             else:
                 logout(request) # add: send session to auth.logout to end Django session and use returnToUrl to redirect to SP logout
         elif (request.path == reverse('session_security_ping') and
