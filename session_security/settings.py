@@ -46,6 +46,8 @@ PASSIVE_URL_NAMES = getattr(settings, 'SESSION_SECURITY_PASSIVE_URL_NAMES', [])
 
 EXPIRE_REDIRECT = getattr(settings, 'SESSION_SECURITY_REDIRECT_TO_LOGOUT', False)
 
+EXPIRE_REDIRECT_TO_PAGE_YAR = getattr(settings, 'SESSION_SECURITY_REDIRECT_TO_PAGE_YAR', '/logout/')
+
 expire_at_browser_close = getattr(
     settings,
     'SESSION_EXPIRE_AT_BROWSER_CLOSE',

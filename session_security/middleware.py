@@ -28,7 +28,7 @@ except ImportError:  # Django < 1.10
     MiddlewareMixin = object
 
 from .utils import get_last_activity, set_last_activity
-from .settings import AA_EXPIRE_AFTER, EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES
+from .settings import AA_EXPIRE_AFTER, EXPIRE_AFTER, PASSIVE_URLS, PASSIVE_URL_NAMES, EXPIRE_REDIRECT_TO_PAGE_YAR
 
 
 class SessionSecurityMiddleware(MiddlewareMixin):
@@ -83,7 +83,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
             if current_url == 'aa_forms_edit':
                 logout(request)
                 targetpath = quote(request.build_absolute_uri())
-                logoutpoint = 'https://familymedicine.uw.edu/yar-logout/'
+                logoutpoint = EXPIRE_REDIRECT_TO_PAGE_YAR
                 logoutpath = logoutpoint + '?target=%s' % targetpath
                 return redirect(logoutpath)
             else:
