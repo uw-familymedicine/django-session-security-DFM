@@ -18,7 +18,7 @@ def expire_after(request):
 @register.filter
 def warn_after(request):
     current_url = resolve(request.path_info).url_name
-    if current_url == 'aa_forms_edit':
+    if current_url == 'yar_forms_edit':
         return AA_WARN_AFTER
     else:
         return WARN_AFTER
@@ -27,7 +27,7 @@ def warn_after(request):
 @register.filter
 def redirect_to_logout(request):
     current_url = resolve(request.path_info).url_name
-    if current_url == 'aa_forms_edit':
+    if current_url == 'yar_forms_edit':
         redirect = False
         return redirect
     else:
