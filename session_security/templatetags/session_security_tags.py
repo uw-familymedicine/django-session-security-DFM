@@ -9,7 +9,7 @@ register = template.Library()
 @register.filter
 def expire_after(request):
     current_url = resolve(request.path_info).url_name
-    if current_url == 'aa_forms_edit':
+    if current_url == 'yar_forms_edit':
         return AA_EXPIRE_AFTER
     else:
         return EXPIRE_AFTER
