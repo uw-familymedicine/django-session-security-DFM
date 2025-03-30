@@ -55,7 +55,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
     def get_expire_seconds(self, request):
         """Return time (in seconds) before the user should be logged out."""
         current_url = resolve(request.path_info).url_name
-        if current_url == 'aa_forms_edit':
+        if current_url == 'yar_forms_edit':
             return AA_EXPIRE_AFTER
         else:
             return EXPIRE_AFTER
@@ -80,7 +80,7 @@ class SessionSecurityMiddleware(MiddlewareMixin):
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
             current_url = resolve(request.path_info).url_name # add: send session to auth.logout to end Django session and the forward to AA logout landing page
-            if current_url == 'aa_forms_edit':
+            if current_url == 'yar_forms_edit':
                 logout(request)
                 targetpath = quote(request.build_absolute_uri())
                 logoutpoint = EXPIRE_REDIRECT_TO_PAGE_YAR
